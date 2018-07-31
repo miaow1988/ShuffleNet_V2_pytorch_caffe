@@ -46,7 +46,8 @@ Models can be downloaded from https://github.com/miaow1988/ShuffleNet_V2_pytorch
 
 ## Something you might have noticed
 1. Models are trained by PyTorch and converted to Caffe. Thus, you should use scale parameter in Caffe's data layer to make sure all input images are rescaled from [0, 255] to [0, 1]. 
-2. The RGB~BGR problem is not very crucial, you may just ignore the difference if you are use these models as pretrained models for other tasks.
+2. The RGB~BGR problem is not crucial here. So you may ignore the difference if you use these models as pretrained models.
 
 ## Others
-All these years, I barely achieved same results of different kinds of complex ImageNet models reported in papers. If you got a better accuracy, please tell me.
+I barely achieved results of different kinds of sophisticated ImageNet models reported in papers. 
+So if you got a better accuracy then mine, please teach me.

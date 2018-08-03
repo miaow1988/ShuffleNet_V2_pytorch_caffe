@@ -4,7 +4,7 @@ ShuffleNet-V2 for both PyTorch and Caffe.
 
 This project supports both Pytorch and Caffe.
 Multiple kinds of model width are supported.
-Model with should be 0.25, 0.5, 1.0, 1.5 or 2.0, other model width are not tested.
+Model width should be 0.25, 0.5, 1.0, 1.5 or 2.0, other model width are not tested.
 
 Usage
 =======================================

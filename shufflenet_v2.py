@@ -80,16 +80,17 @@ class Network(nn.Module):
 
     def __init__(self, num_classes, width_multiplier):
         super(Network, self).__init__()
-        assert width_multiplier in (0.25, 0.5, 1.0, 1.5, 2.0)
-        self.num_classes = num_classes
-        in_channels = 24
         width_config = {
             0.25: (24, 48, 96, 512),
+            0.33: (32, 64, 128, 512),
             0.5: (48, 96, 192, 1024),
             1.0: (116, 232, 464, 1024),
             1.5: (176, 352, 704, 1024),
             2.0: (244, 488, 976, 2048),
         }
+        width_config = width_config[width_multiplier]
+        self.num_classes = num_classes
+        in_channels = 24
 
         # outputs, stride, dilation, blocks, type
         self.network_config = [
@@ -97,12 +98,12 @@ class Network(nn.Module):
             slim.conv_bn_relu('stage1/conv', 3, in_channels, 3, 2, 1),
             # g_name('stage1/pool', nn.MaxPool2d(3, 2, 1)),
             g_name('stage1/pool', nn.MaxPool2d(3, 2, 0, ceil_mode=True)),
-            (width_config[width_multiplier][0], 2, 1, 4, 'b'),
-            (width_config[width_multiplier][1], 2, 1, 8, 'b'), # x16
-            (width_config[width_multiplier][2], 2, 1, 4, 'b'), # x32
-            slim.conv_bn_relu('conv5', width_config[width_multiplier][2], width_config[width_multiplier][3], 1),
+            (width_config[0], 2, 1, 4, 'b'),
+            (width_config[1], 2, 1, 8, 'b'), # x16
+            (width_config[2], 2, 1, 4, 'b'), # x32
+            slim.conv_bn_relu('conv5', width_config[2], width_config[3], 1),
             g_name('pool', nn.AvgPool2d(7, 1)),
-            g_name('fc', nn.Conv2d(width_config[width_multiplier][3], self.num_classes, 1)),
+            g_name('fc', nn.Conv2d(width_config[3], self.num_classes, 1)),
         ]
         self.network = []
         for i, config in enumerate(self.network_config):
@@ -123,7 +124,7 @@ class Network(nn.Module):
 
         for name, m in self.named_modules():
             if any(map(lambda x: isinstance(m, x), [nn.Linear, nn.Conv1d, nn.Conv2d])):
-                nn.init.kaiming_normal_(m.weight, mode='fan_out')
+                nn.init.kaiming_uniform_(m.weight, mode='fan_in')
                 if m.bias is not None:
                     nn.init.constant_(m.bias, 0)
 

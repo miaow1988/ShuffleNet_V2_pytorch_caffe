@@ -35,11 +35,12 @@ python shufflenet_v2.py --load_pytorch net.pth --save_caffe net --num_classes 10
 ```
 
 Pretrained ImageNet Models for PyTorch and Caffe
+=======================================
 Pretrained models can be downloaded from: https://github.com/miaow1988/ShuffleNet_V2_pytorch_caffe/releases
 
-### shufflenet_v2_x0.25, Top-1 Acc = 46.04%. Unofficial.
-### shufflenet_v2_x0.33, Top-1 Acc = 51.40%. Unofficial.
-### shufflenet_v2_x0.50, Top-1 Acc = 58.93%. This accuracy is 1.37% lower compared with the result in the official paper.
+* shufflenet_v2_x0.25, Top-1 Acc = 46.04%. Unofficial.
+* shufflenet_v2_x0.33, Top-1 Acc = 51.40%. Unofficial.
+* shufflenet_v2_x0.50, Top-1 Acc = 58.93%. This accuracy is 1.37% lower compared with the result in the official paper.
 
 Training Details
 ---------------------------------------

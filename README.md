@@ -3,8 +3,7 @@ ShuffleNet_V2_pytorch_caffe
 ShuffleNet-V2 for both PyTorch and Caffe.
 
 This project supports both Pytorch and Caffe.
-Multiple kinds of model width are supported.
-Model width should be 0.25, 0.5, 1.0, 1.5 or 2.0, other model width are not tested.
+Supported model width are 0.25, 0.33, 0.5, 1.0, 1.5 or 2.0, other model width are not supported.
 
 Usage
 =======================================
@@ -17,6 +16,8 @@ import shufflenet_v2
 num_classes = 1000
 model_width = 0.5 
 shufflenet_v2.Network(num_classes, model_width)
+params = torch.load('shufflenet_v2_x0.5.pth', map_location=lambda storage, loc: storage)
+net.load_state_dict(params)
 ```
 
 Caffe
@@ -32,22 +33,27 @@ Converting Model from PyTorch to Caffe
 python shufflenet_v2.py --load_pytorch net.pth --save_caffe net --num_classes 1000 --model_width 1.0
 ```
 
-# Trained Models for PyTorch and Caffe
+Pretrained ImageNet Models for PyTorch and Caffe
+=======================================
 Pretrained models can be downloaded from: https://github.com/miaow1988/ShuffleNet_V2_pytorch_caffe/releases
 
-### shufflenet_v2_x0.25, Top-1 Acc = 46.04%
-### shufflenet_v2_x0.5, Top-1 Acc = 57.51%. This accuracy is 2.8% lower compared with the result in paper.
+* shufflenet_v2_x0.25, Top-1 Acc = 46.04%. Unofficial.
+* shufflenet_v2_x0.33, Top-1 Acc = 51.40%. Unofficial.
+* shufflenet_v2_x0.50, Top-1 Acc = 58.93%. This accuracy is 1.37% lower compared with the result in the official paper.
 
-## Training the model
+Training Details
+---------------------------------------
 1. All ImageNet images are resized by a short edge size of 256 (bicubic interpolation by PIL). And then each of them are pickled by Python and stored in a LMDB dataset.
 2. Training is done by PyTorch 0.4.0
-3. data augmentation: 224x224 random crop and random horizontal flip. No image mean extraction is used here, which can be done automatically by data/bn layers in the network.
+3. data augmentation: 224x224 random crop and random horizontal flip. No image mean extraction is used here, which is done automatically by data/bn layers in the network.
 4. As in my codes, networks are initialized by nn.init.kaiming_normal_(m.weight, mode='fan_out').
-5. A SGD with nesterov momentum (0.9) is used for optimizing, Batch size is 512. Models are trained by 300000 iterations, while the learning rate decayed linearly from 0.25 to 0. (The batch size used in paper is 1024, and the initial learning rate is 0.5 instead 0.25. Because I don't have enough time for a time consuming training.)
+5. A SGD with nesterov momentum (0.9) is used for optimizing. The batch size is 1024. Models are trained by 300000 iterations, while the learning rate decayed linearly from 0.5 to 0.
 
-## Something you might have noticed
+Something you might have noticed
+---------------------------------------
 1. Models are trained by PyTorch and converted to Caffe. Thus, you should use scale parameter in Caffe's data layer to make sure all input images are rescaled from [0, 255] to [0, 1]. 
 2. The RGB~BGR problem is not very crucial, you may just ignore the difference if you are use these models as pretrained models for other tasks.
 
-## Others
-All these years, I barely achieved same results of different kinds of complex ImageNet models reported in papers. If you got a better accuracy, please tell me.
+Others
+---------------------------------------
+All these years, I barely achieved same or higher results of different kinds of complex ImageNet models reported in papers. If you got a better accuracy, please tell me.

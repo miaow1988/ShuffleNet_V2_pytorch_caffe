@@ -12,12 +12,15 @@ PyTorch
 ---------------------------------------
 Just use shufflenet_v2.py as following.
 ```
+import torch
 import shufflenet_v2
 num_classes = 1000
-model_width = 0.5 
-shufflenet_v2.Network(num_classes, model_width)
+model_width = 0.5
+net = shufflenet_v2.Network(num_classes, model_width)
 params = torch.load('shufflenet_v2_x0.5.pth', map_location=lambda storage, loc: storage)
 net.load_state_dict(params)
+input = torch.randn(1,3,224,224)
+output = net(input)
 ```
 
 Caffe
